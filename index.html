@@ -47,8 +47,6 @@ body.dark {
 }
 
 /* GLOBAL */
-* { box-sizing:border-box; }
-
 body {
   margin:0;
   font-family:Inter,system-ui,Arial;
@@ -75,10 +73,7 @@ body.dark .topbar {
   border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
-.brand {
-  display:flex;
-  align-items:center;
-}
+.brand { display:flex;align-items:center; }
 
 .logo {
   width:34px;height:34px;
@@ -114,17 +109,17 @@ body.dark nav a { color:#e5e7eb; }
 }
 body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
 
-/* MAIN PAGE — DESKTOP */
+/* MAIN PAGE */
 .page {
-  max-width:1200px;
+  max-width:1250px;
   margin:30px auto;
   padding:0 20px;
   display:grid;
-  grid-template-columns:280px 1fr;
+  grid-template-columns:300px 1fr;
   gap:30px;
 }
 
-/* MOBILE RESPONSIVE */
+/* MOBILE */
 @media(max-width: 900px){
   .page {
     grid-template-columns:1fr;
@@ -137,7 +132,7 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   }
 }
 
-/* PROFILE CARD */
+/* CARDS */
 .card {
   background:var(--card-bg);
   border-radius:var(--radius);
@@ -146,6 +141,7 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   overflow:hidden;
 }
 
+/* PHOTO */
 .profile-photo-wrapper {
   display:flex;
   justify-content:center;
@@ -160,6 +156,7 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   border:4px solid var(--accent-2);
 }
 
+/* LEFT CARD TEXT */
 .profile-body {
   padding:18px;
 }
@@ -167,6 +164,7 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
 .name { margin:0;font-size:20px;font-weight:700; }
 .title { color:var(--muted);font-size:13px;margin-top:6px; }
 
+/* LINKS */
 .links a {
   display:block;
   color:var(--accent-2);
@@ -210,7 +208,7 @@ body.dark .metrics-box {
   color:white;
 }
 
-/* CONTENT */
+/* CONTENT BOX */
 .content {
   background:var(--card-bg);
   padding:25px;
@@ -232,12 +230,14 @@ details {
 details summary { font-size:15px;font-weight:600;cursor:pointer; }
 details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:none;font-size:14px; }
 
+/* FOOTER */
 .footer {
   text-align:center;
   padding:20px;
   color:var(--muted);
   font-size:13px;
 }
+
 </style>
 </head>
 
@@ -249,7 +249,7 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
 
   <nav style="margin-left:40px;">
     <a onclick="switchTab('bio')">Biography</a>
-    <a onclick="switchTab('pub')">Publicications</a>
+    <a onclick="switchTab('pub')">Publications</a>
     <a onclick="switchTab('research')">Research</a>
     <a onclick="switchTab('teaching')">Teaching</a>
     <a onclick="switchTab('projects')">Projects</a>
@@ -294,7 +294,7 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
         <p style="margin:4px 0; font-size:14px;"><b>i10-index:</b> <span id="i10index_val">{{I10INDEX}}</span></p>
 
         <p style="margin:10px 0 0 0; font-size:12px; color:var(--muted);">
-          (Updated automatically from Scopus daily)
+          (Updated automatically from Google Scholar daily)
         </p>
       </div>
 

@@ -1,59 +1,406 @@
-import json
-import requests
-import re
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dr. Nazir A. Loan — Profile</title>
 
-SCOPUS_ID = "56997291000"
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-def get_scopus_metrics(api_key):
-    url = f"https://api.elsevier.com/content/author/author_id/{SCOPUS_ID}?view=ENHANCED"
-    headers = {"X-ELS-APIKey": api_key}
+<style>
 
-    r = requests.get(url, headers=headers)
+/* ---------- FOOTER BOTTOM FIX ---------- */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+main.page {
+  flex: 1 0 auto;
+}
+footer.footer {
+  flex-shrink: 0;
+}
 
-    if r.status_code != 200:
-        print("Error:", r.text)
-        return None
+/* ROOT COLORS */
+:root {
+  --page-bg:#f5f6f7;
+  --card-bg:#ffffff;
+  --text:#1c2b33;
+  --muted:#60717d;
+  --accent-1:#a31d2f;
+  --accent-2:#006a8e;
+  --radius:14px;
+  --shadow:0 4px 20px rgba(16,24,40,0.06);
+}
 
-    data = r.json()
-    author = data["author-retrieval-response"][0]
+/* DARK MODE COLORS */
+body.dark {
+  --page-bg:#0d1117;
+  --card-bg:#161b22;
+  --text:#f0f6fc;
+  --muted:#9fb7c6;
+  --accent-2:#2ea8ff;
+  --accent-1:#ff4f6a;
+}
 
-    h_index = author.get("h-index", "N/A")
-    citations = author["coredata"].get("citation-count", "N/A")
+/* GLOBAL */
+* { box-sizing:border-box; }
 
-    # Scopus does not provide i10-index
-    i10_index = "N/A"
+body {
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--page-bg);
+  color:var(--text);
+  line-height:1.6;
+}
 
-    return citations, h_index, i10_index
+/* TOPBAR */
+.topbar {
+  position:sticky;
+  top:0;
+  z-index:50;
+  height:60px;
+  display:flex;
+  align-items:center;
+  padding:8px 20px;
+  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.75);
+  border-bottom:1px solid rgba(0,0,0,0.08);
+}
+body.dark .topbar {
+  background:rgba(22,27,34,0.8);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
 
+.brand {
+  display:flex;
+  align-items:center;
+}
 
-def update_html(citations, h_index, i10_index):
-    with open("index.html", "r", encoding="utf-8") as f:
-        html = f.read()
+.logo {
+  width:34px;height:34px;
+  border-radius:6px;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  display:flex;justify-content:center;align-items:center;
+  color:white;font-weight:700;font-size:13px;
+}
 
-    html = html.replace("{{CITATIONS}}", str(citations))
-    html = html.replace("{{HINDEX}}", str(h_index))
-    html = html.replace("{{I10INDEX}}", str(i10_index))
+.brand h4 {
+  margin:0 0 0 10px;
+  font-weight:700;
+  font-size:18px;
+}
 
-    with open("index.html", "w", encoding="utf-8") as f:
-        f.write(html)
+nav a {
+  font-weight:600;
+  cursor:pointer;
+  margin-right:15px;
+  color:var(--text);
+  text-decoration:none;
+}
+body.dark nav a { color:#e5e7eb; }
 
+/* DARK MODE BUTTON */
+#darkToggle {
+  margin-left:auto;
+  padding:6px 14px;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,0.2);
+  background:none;
+  cursor:pointer;
+}
+body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
 
-def main():
-    # Load API key from environment variable
-    import os
-    api_key = os.getenv("SCOPUS_API_KEY")
+/* MAIN PAGE — DESKTOP */
+.page {
+  max-width:1200px;
+  margin:30px auto;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:30px;
+}
 
-    if not api_key:
-        print("Missing API key")
-        return
+/* MOBILE RESPONSIVE */
+@media(max-width: 900px){
+  .page {
+    grid-template-columns:1fr;
+  }
+  nav { display:none; }
+  .tabs-top {
+    justify-content:flex-start;
+    overflow-x:auto;
+    padding-bottom:8px;
+  }
+}
 
-    metrics = get_scopus_metrics(api_key)
-    if metrics:
-        update_html(*metrics)
-        print("Scopus metrics updated successfully!")
-    else:
-        print("Failed to retrieve metrics.")
+/* PROFILE CARD */
+.card {
+  background:var(--card-bg);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(0,0,0,0.05);
+  overflow:hidden;
+}
 
+.profile-photo-wrapper {
+  display:flex;
+  justify-content:center;
+  padding:25px 0 10px 0;
+}
 
-if __name__ == "__main__":
-    main()
+.profile-photo {
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid var(--accent-2);
+}
+
+.profile-body {
+  padding:18px;
+}
+
+.name { margin:0;font-size:20px;font-weight:700; }
+.title { color:var(--muted);font-size:13px;margin-top:6px; }
+
+.links a {
+  display:block;
+  color:var(--accent-2);
+  font-weight:600;
+  margin:6px 0;
+  text-decoration:none;
+}
+
+/* METRICS BOX */
+.metrics-box {
+  margin-top:18px;
+  padding:14px;
+  background:var(--page-bg);
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,0.12);
+}
+body.dark .metrics-box {
+  background:#1e242d;
+  border-color:rgba(255,255,255,0.1);
+}
+
+/* TABS */
+.tabs-top {
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.tab {
+  padding:10px 14px;
+  background:#e5e7eb;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.tab.active {
+  background:var(--accent-2);
+  color:white;
+}
+
+/* CONTENT */
+.content {
+  background:var(--card-bg);
+  padding:25px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.section { display:none; }
+.section.active { display:block; }
+
+/* DROPDOWNS */
+details {
+  padding:12px;
+  border-radius:8px;
+  background:var(--card-bg);
+  border:1px solid rgba(0,0,0,0.12);
+  margin-bottom:12px;
+}
+details summary { font-size:15px;font-weight:600;cursor:pointer; }
+details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:none;font-size:14px; }
+
+.footer {
+  text-align:center;
+  padding:20px;
+  color:var(--muted);
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="brand"><div class="logo">NL</div><h4>Dr. Nazir A. Loan</h4></div>
+
+  <nav style="margin-left:40px;">
+    <a onclick="switchTab('bio')">Biography</a>
+    <a onclick="switchTab('pub')">Publications</a>
+    <a onclick="switchTab('research')">Research</a>
+    <a onclick="switchTab('teaching')">Teaching</a>
+    <a onclick="switchTab('projects')">Projects</a>
+    <a onclick="switchTab('materials')">Materials</a>
+    <a onclick="switchTab('awards')">Awards</a>
+    <a onclick="switchTab('contact')">Contact</a>
+  </nav>
+
+  <button id="darkToggle">🌙 Dark</button>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="page">
+
+  <!-- LEFT PROFILE CARD -->
+  <aside class="card">
+
+    <div class="profile-photo-wrapper">
+      <img src="dummy-photo.jpg" class="profile-photo">
+    </div>
+
+    <div class="profile-body">
+      <p class="name">Dr. Nazir A. Loan</p>
+      <p class="title">Ph.D. in Electronics — Multimedia Security & Embedded Systems</p>
+
+      <div class="links">
+        <a href="#">University Profile</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Google Scholar</a>
+        <a href="#">Web of Science</a>
+        <a href="#">Scopus</a>
+        <a href="#">ResearchGate</a>
+        <a href="#">GitHub</a>
+      </div>
+
+      <!-- CITATION METRICS BOX -->
+      <div class="metrics-box">
+        <h3 style="margin:0 0 10px 0; font-size:15px; font-weight:700;">Citation Metrics</h3>
+
+        <p style="margin:4px 0; font-size:14px;"><b>Total Citations:</b> <span id="citations_val">{{CITATIONS}}</span></p>
+        <p style="margin:4px 0; font-size:14px;"><b>h-index:</b> <span id="hindex_val">{{HINDEX}}</span></p>
+        <p style="margin:4px 0; font-size:14px;"><b>i10-index:</b> <span id="i10index_val">{{I10INDEX}}</span></p>
+
+        <p style="margin:10px 0 0 0; font-size:12px; color:var(--muted);">
+          (Updated daily from Scopus)
+        </p>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- RIGHT SIDE CONTENT -->
+  <section>
+
+    <div class="tabs-top">
+      <button class="tab active" data-tab="bio" onclick="switchTab('bio')">Biography</button>
+      <button class="tab" data-tab="pub" onclick="switchTab('pub')">Publications</button>
+      <button class="tab" data-tab="research" onclick="switchTab('research')">Research</button>
+      <button class="tab" data-tab="teaching" onclick="switchTab('teaching')">Teaching</button>
+      <button class="tab" data-tab="projects" onclick="switchTab('projects')">Projects</button>
+      <button class="tab" data-tab="materials" onclick="switchTab('materials')">Materials</button>
+      <button class="tab" data-tab="awards" onclick="switchTab('awards')">Awards</button>
+      <button class="tab" data-tab="contact" onclick="switchTab('contact')">Contact</button>
+    </div>
+
+    <div class="content card">
+
+      <!-- BIO -->
+      <div id="bio" class="section active">
+        <h2>Biography</h2>
+        <p>Your biography here...</p>
+      </div>
+
+      <!-- PUBLICATIONS -->
+      <div id="pub" class="section">
+        <h2>Publications</h2>
+        <p>Add publications here.</p>
+      </div>
+
+      <!-- RESEARCH -->
+      <div id="research" class="section">
+        <h2>Research</h2>
+        <p>Your research areas here.</p>
+      </div>
+
+      <!-- TEACHING -->
+      <div id="teaching" class="section">
+        <h2>Teaching</h2>
+        <p>Your teaching areas here.</p>
+      </div>
+
+      <!-- PROJECTS -->
+      <div id="projects" class="section">
+        <h2>Projects & Codes</h2>
+
+        <details><summary>IoT Projects</summary>
+          <a href="#">Smart Home Automation</a>
+        </details>
+
+        <details><summary>Multimedia Security</summary>
+          <a href="#">Watermarking System</a>
+        </details>
+      </div>
+
+      <!-- MATERIALS -->
+      <div id="materials" class="section">
+        <h2>Materials</h2>
+        <details><summary>Semester 1</summary>
+          <a href="#">Unit 1 PDF</a>
+        </details>
+
+        <details><summary>Semester 2</summary>
+          <a href="#">Notes PDF</a>
+        </details>
+      </div>
+
+      <!-- AWARDS -->
+      <div id="awards" class="section">
+        <h2>Awards</h2>
+        <p>Your awards here.</p>
+      </div>
+
+      <!-- CONTACT -->
+      <div id="contact" class="section">
+        <h2>Contact</h2>
+        <p>Email: <b>nazirloan786@gmail.com</b></p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">© <span id="year"></span> Dr. Nazir A. Loan</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+/* SWITCH TABS */
+function switchTab(tab){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelector(`.tab[data-tab="${tab}"]`).classList.add("active");
+
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(tab).classList.add("active");
+}
+
+/* DARK MODE */
+document.getElementById("darkToggle").onclick = ()=>{
+  document.body.classList.toggle("dark");
+};
+</script>
+
+</body>
+</html>

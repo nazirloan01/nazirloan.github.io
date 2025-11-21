@@ -10,19 +10,11 @@
 <style>
 
 /* ---------- FOOTER BOTTOM FIX ---------- */
-html, body {
-  height: 100%;
-}
-body {
-  display: flex;
-  flex-direction: column;
-}
-main.page {
-  flex: 1 0 auto;
-}
-footer.footer {
-  flex-shrink: 0;
-}
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; }
+main.page { flex: 1 0 auto; }
+footer.footer { flex-shrink: 0; }
+
 /* ROOT COLORS */
 :root {
   --page-bg:#f5f6f7;
@@ -35,7 +27,7 @@ footer.footer {
   --shadow:0 4px 20px rgba(16,24,40,0.06);
 }
 
-/* DARK MODE COLORS */
+/* DARK MODE OVERRIDE */
 body.dark {
   --page-bg:#0d1117;
   --card-bg:#161b22;
@@ -54,7 +46,7 @@ body {
   line-height:1.6;
 }
 
-/* TOPBAR */
+/* TOP BAR */
 .topbar {
   position:sticky;
   top:0;
@@ -72,14 +64,30 @@ body.dark .topbar {
   border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
-.brand { display:flex;align-items:center; }
+/* BRAND LEFT */
+.brand {
+  display:flex;
+  align-items:center;
+  flex-shrink:0;
+}
 
-.logo {
-  width:34px;height:34px;
-  border-radius:6px;
-  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
-  display:flex;justify-content:center;align-items:center;
-  color:white;font-weight:700;font-size:13px;
+/* BRAND LOGO IMAGE (UPDATED) */
+.logo-container {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand h4 {
@@ -88,18 +96,30 @@ body.dark .topbar {
   font-size:18px;
 }
 
-nav a {
-  font-weight:600;
-  cursor:pointer;
-  margin-right:15px;
-  color:var(--text);
-  text-decoration:none;
+/* NAV TABS RIGHT */
+.nav-tabs {
+  display:flex;
+  gap:20px;
+  margin-left:auto;
+  overflow-x:auto;
 }
-body.dark nav a { color:#e5e7eb; }
+.nav-tabs a {
+  font-weight:600;
+  text-decoration:none;
+  color:var(--text);
+  padding:6px 8px;
+  white-space:nowrap;
+  border-radius:8px;
+  cursor:pointer;
+}
+.nav-tabs a.active {
+  background:var(--accent-2);
+  color:white;
+}
 
 /* DARK MODE BUTTON */
 #darkToggle {
-  margin-left:auto;
+  margin-left:15px;
   padding:6px 14px;
   border-radius:8px;
   border:1px solid rgba(0,0,0,0.2);
@@ -108,27 +128,20 @@ body.dark nav a { color:#e5e7eb; }
 }
 body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
 
-/* MAIN PAGE */
+/* MAIN GRID — UPDATED LEFT & RIGHT WIDTHS */
 .page {
-  max-width:1250px;
-  margin:30px auto;
-  padding:0 20px;
+  margin:30px 0;
+  width:100%;
+  padding:20px;
   display:grid;
-  grid-template-columns:300px 1fr;
-  gap:30px;
+  grid-template-columns:240px 800px;
+  gap:40px;
 }
 
 /* MOBILE */
-@media(max-width: 900px){
-  .page {
-    grid-template-columns:1fr;
-  }
-  nav { display:none; }
-  .tabs-top {
-    justify-content:flex-start;
-    overflow-x:auto;
-    padding-bottom:8px;
-  }
+@media(max-width: 800px){
+  .page { grid-template-columns:1fr; }
+  .nav-tabs { gap:10px;font-size:14px;padding-right:10px; }
 }
 
 /* CARDS */
@@ -146,21 +159,18 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   justify-content:center;
   padding:25px 0 10px 0;
 }
-
 .profile-photo {
-  width:150px;
-  height:150px;
+  width:200px;
+  height:220px;
   border-radius:50%;
   object-fit:cover;
   border:4px solid var(--accent-2);
 }
 
-/* LEFT CARD TEXT */
+/* LEFT CARD */
 .profile-body {
   padding:18px;
 }
-
-.name { margin:0;font-size:20px;font-weight:700; }
 .title { color:var(--muted);font-size:13px;margin-top:6px; }
 
 /* LINKS */
@@ -172,7 +182,7 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   text-decoration:none;
 }
 
-/* METRICS BOX */
+/* METRICS */
 .metrics-box {
   margin-top:18px;
   padding:14px;
@@ -180,34 +190,8 @@ body.dark #darkToggle { border-color:rgba(255,255,255,0.3); }
   border-radius:10px;
   border:1px solid rgba(0,0,0,0.12);
 }
-body.dark .metrics-box {
-  background:#1e242d;
-  border-color:rgba(255,255,255,0.1);
-}
 
-/* TABS */
-.tabs-top {
-  display:flex;
-  gap:10px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
-
-.tab {
-  padding:10px 14px;
-  background:#e5e7eb;
-  border-radius:8px;
-  font-weight:600;
-  cursor:pointer;
-  font-size:14px;
-}
-
-.tab.active {
-  background:var(--accent-2);
-  color:white;
-}
-
-/* CONTENT BOX */
+/* RIGHT CONTENT */
 .content {
   background:var(--card-bg);
   padding:25px;
@@ -217,17 +201,6 @@ body.dark .metrics-box {
 
 .section { display:none; }
 .section.active { display:block; }
-
-/* DROPDOWNS */
-details {
-  padding:12px;
-  border-radius:8px;
-  background:var(--card-bg);
-  border:1px solid rgba(0,0,0,0.12);
-  margin-bottom:12px;
-}
-details summary { font-size:15px;font-weight:600;cursor:pointer; }
-details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:none;font-size:14px; }
 
 /* FOOTER */
 .footer {
@@ -244,10 +217,16 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
 
 <!-- TOP BAR -->
 <header class="topbar">
-  <div class="brand"><div class="logo">NL</div><h4>Dr. Nazir A. Loan</h4></div>
 
-  <nav style="margin-left:40px;">
-    <a onclick="switchTab('bio')">Biography</a>
+  <div class="brand">
+    <div class="logo-container">
+      <img src="image1.png" class="logo-img" alt="Logo">
+    </div>
+    <h4>Dr. Nazir A. Loan</h4>
+  </div>
+
+  <nav class="nav-tabs">
+    <a class="active" onclick="switchTab('bio')">Biography</a>
     <a onclick="switchTab('pub')">Publications</a>
     <a onclick="switchTab('research')">Research</a>
     <a onclick="switchTab('teaching')">Teaching</a>
@@ -257,13 +236,14 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
     <a onclick="switchTab('contact')">Contact</a>
   </nav>
 
-  <button id="darkToggle">🌙 Dark</button>
+  <button id="darkToggle">🌙</button>
+
 </header>
 
-<!-- MAIN PAGE -->
+<!-- MAIN CONTENT -->
 <main class="page">
 
-  <!-- LEFT PROFILE CARD -->
+  <!-- LEFT CARD -->
   <aside class="card">
 
     <div class="profile-photo-wrapper">
@@ -271,7 +251,6 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
     </div>
 
     <div class="profile-body">
-      <p class="name">Dr. Nazir A. Loan</p>
       <p class="title">Ph.D. in Electronics — Multimedia Security & Embedded Systems</p>
 
       <div class="links">
@@ -284,112 +263,73 @@ details a { color:var(--accent-2);display:block;margin:4px 0;text-decoration:non
         <a href="#">GitHub</a>
       </div>
 
-      <!-- CITATION METRICS BOX -->
       <div class="metrics-box">
-        <h3 style="margin:0 0 10px 0; font-size:15px; font-weight:700;">Citation Metrics</h3>
-
-        <p style="margin:4px 0; font-size:14px;"><b>Total Citations:</b> <span id="citations_val">1879</span></p>
-        <p style="margin:4px 0; font-size:14px;"><b>h-index:</b> <span id="hindex_val">16</span></p>
-        <p style="margin:4px 0; font-size:14px;"><b>i10-index:</b> <span id="i10index_val">21</span></p>
-
-        <p style="margin:10px 0 0 0; font-size:12px; color:var(--muted);">
-          (Updated automatically from Google Scholar daily)
-        </p>
+        <h3>Citation Metrics</h3>
+        <p><b>Total Citations:</b> <span>{{CITATIONS}}</span></p>
+        <p><b>h-index:</b> <span>{{HINDEX}}</span></p>
+        <p><b>i10-index:</b> <span>{{I10INDEX}}</span></p>
       </div>
-
     </div>
+
   </aside>
 
-  <!-- RIGHT SIDE CONTENT -->
-  <section>
+  <!-- RIGHT CONTENT -->
+  <section class="content card">
 
-    <div class="tabs-top">
-      <button class="tab active" data-tab="bio" onclick="switchTab('bio')">Biography</button>
-      <button class="tab" data-tab="pub" onclick="switchTab('pub')">Publications</button>
-      <button class="tab" data-tab="research" onclick="switchTab('research')">Research</button>
-      <button class="tab" data-tab="teaching" onclick="switchTab('teaching')">Teaching</button>
-      <button class="tab" data-tab="projects" onclick="switchTab('projects')">Projects</button>
-      <button class="tab" data-tab="materials" onclick="switchTab('materials')">Materials</button>
-      <button class="tab" data-tab="awards" onclick="switchTab('awards')">Awards</button>
-      <button class="tab" data-tab="contact" onclick="switchTab('contact')">Contact</button>
+    <div id="bio" class="section active">
+      <h2>Biography</h2>
+      <p>Add your biography here.</p>
     </div>
 
-    <div class="content card">
-
-      <!-- BIO -->
-      <div id="bio" class="section active">
-        <h2>Biography</h2>
-        <p>Your biography here...</p>
-      </div>
-
-      <!-- PUBLICATIONS -->
-      <div id="pub" class="section">
-        <h2>Publications</h2>
-        <p>Add publications here.</p>
-      </div>
-
-      <!-- RESEARCH -->
-      <div id="research" class="section">
-        <h2>Research</h2>
-        <p>Your research areas here.</p>
-      </div>
-
-      <!-- TEACHING -->
-      <div id="teaching" class="section">
-        <h2>Teaching</h2>
-        <p>Your teaching areas here.</p>
-      </div>
-
-      <!-- PROJECTS -->
-      <div id="projects" class="section">
-        <h2>Projects & Codes</h2>
-
-        <details><summary>IoT Projects</summary>
-          <a href="#">Smart Home Automation</a>
-        </details>
-
-        <details><summary>Multimedia Security</summary>
-          <a href="#">Watermarking System</a>
-        </details>
-      </div>
-
-      <!-- MATERIALS -->
-      <div id="materials" class="section">
-        <h2>Materials</h2>
-        <details><summary>Semester 1</summary>
-          <a href="#">Unit 1 PDF</a>
-        </details>
-
-        <details><summary>Semester 2</summary>
-          <a href="#">Notes PDF</a>
-        </details>
-      </div>
-
-      <!-- AWARDS -->
-      <div id="awards" class="section">
-        <h2>Awards</h2>
-        <p>Your awards go here.</p>
-      </div>
-
-      <!-- CONTACT -->
-      <div id="contact" class="section">
-        <h2>Contact</h2>
-        <p>Email: <b>nazirloan786@gmail.com</b></p>
-      </div>
-
+    <div id="pub" class="section">
+      <h2>Publications</h2>
+      <p>Your publication list goes here.</p>
     </div>
+
+    <div id="research" class="section">
+      <h2>Research</h2>
+      <p>Your research interests here.</p>
+    </div>
+
+    <div id="teaching" class="section">
+      <h2>Teaching</h2>
+      <p>Your teaching interests here.</p>
+    </div>
+
+    <div id="projects" class="section">
+      <h2>Projects</h2>
+      <p>Project descriptions here.</p>
+    </div>
+
+    <div id="materials" class="section">
+      <h2>Materials</h2>
+      <p>Course materials here.</p>
+    </div>
+
+    <div id="awards" class="section">
+      <h2>Awards</h2>
+      <p>Awards listed here.</p>
+    </div>
+
+    <div id="contact" class="section">
+      <h2>Contact</h2>
+      <p>Email: <b>nazirloan786@gmail.com</b></p>
+    </div>
+
   </section>
 </main>
 
-<footer class="footer">© <span id="year"></span> Dr. Nazir A. Loan</footer>
+<footer class="footer">
+  © <span id="year"></span> Dr. Nazir A. Loan
+</footer>
 
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 
 /* SWITCH TABS */
 function switchTab(tab){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.querySelector(`.tab[data-tab="${tab}"]`).classList.add("active");
+  document.querySelectorAll(".nav-tabs a").forEach(t=>t.classList.remove("active"));
+  document.querySelector(`.nav-tabs a[onclick="switchTab('${tab}')"]`).classList.add("active");
 
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.getElementById(tab).classList.add("active");
@@ -403,4 +343,3 @@ document.getElementById("darkToggle").onclick = ()=>{
 
 </body>
 </html>
-
